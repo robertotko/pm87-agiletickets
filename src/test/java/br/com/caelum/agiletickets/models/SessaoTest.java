@@ -22,7 +22,7 @@ public class SessaoTest {
 	}
 	
 	@Test
-	public void deveVender1ingressosSeHa1vagas() throws Exception {
+	public void deveVender1ingressosSeHa1vaga() throws Exception {
 		Sessao sessao = new Sessao();
 		sessao.setTotalIngressos(1);
 		

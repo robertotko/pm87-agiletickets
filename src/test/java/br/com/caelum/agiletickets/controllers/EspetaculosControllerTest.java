@@ -7,7 +7,10 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -17,6 +20,7 @@ import org.mockito.Spy;
 import br.com.caelum.agiletickets.domain.Agenda;
 import br.com.caelum.agiletickets.domain.DiretorioDeEstabelecimentos;
 import br.com.caelum.agiletickets.models.Espetaculo;
+import br.com.caelum.agiletickets.models.Periodicidade;
 import br.com.caelum.agiletickets.models.Sessao;
 import br.com.caelum.agiletickets.models.TipoDeEspetaculo;
 import br.com.caelum.vraptor.Result;
@@ -117,5 +121,49 @@ public class EspetaculosControllerTest {
 
 		assertThat(sessao.getIngressosDisponiveis(), is(2));
 	}
+	
+	@Test
+	public void criarTresSessoesPeriodoSemanal() throws Exception {
+		
+		LocalTime lhorario = new LocalTime();
+		LocalDate linicio = new LocalDate(2011,1,9);
+		LocalDate lsegundaSessao = new LocalDate(2011,1,16);
+		LocalDate lfim = new LocalDate(2011,1,23);
+		
+		Espetaculo espetaculo = new Espetaculo();
+		List<Sessao> sessoes = espetaculo.criaSessoes(linicio, lfim, lhorario, Periodicidade.SEMANAL);
+		
+		assertThat(sessoes.get(0).getInicio().toLocalDate().equals(linicio) &&
+		sessoes.get(1).getInicio().toLocalDate().equals(lsegundaSessao) &&
+		sessoes.get(2).getInicio().toLocalDate().equals(lfim), is(true));
+	}
 
+	@Test
+	public void criarTresSessoesPeriodoDiario() throws Exception {
+		
+		LocalTime lhorario = new LocalTime();
+		LocalDate linicio = new LocalDate(2011,1,9);
+		LocalDate lsegundaSessao = new LocalDate(2011,1,10);
+		LocalDate lfim = new LocalDate(2011,1,11);
+		
+		Espetaculo espetaculo = new Espetaculo();
+		List<Sessao> sessoes = espetaculo.criaSessoes(linicio, lfim, lhorario, Periodicidade.DIARIA);
+		
+		assertThat(sessoes.get(0).getInicio().toLocalDate().equals(linicio) &&
+		sessoes.get(1).getInicio().toLocalDate().equals(lsegundaSessao) &&
+		sessoes.get(2).getInicio().toLocalDate().equals(lfim), is(true));
+	}
+	
+	@Test
+	public void criarUmaSessaoPeriodoDiario() throws Exception {
+		
+		LocalTime lhorario = new LocalTime();
+		LocalDate linicio = new LocalDate(2011,1,9);
+		LocalDate lfim = new LocalDate(2011,1,9);
+		
+		Espetaculo espetaculo = new Espetaculo();
+		List<Sessao> sessoes = espetaculo.criaSessoes(linicio, lfim, lhorario, Periodicidade.DIARIA);
+		
+		assertThat(sessoes.get(0).getInicio().toLocalDate().equals(linicio), is(true));
+	}
 }
